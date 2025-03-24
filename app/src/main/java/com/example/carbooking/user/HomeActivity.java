@@ -128,6 +128,7 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.view.GravityCompat;
 
 import com.bumptech.glide.Glide;
@@ -159,6 +160,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private CategoryRepository categoryRepository;
     private TourAdapter tourAdapter;
     private List<Category> activeCategories;
+    private List<Tour> fullTourList; // Lưu danh sách đầy đủ để lọc
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -218,7 +220,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             Intent intent = new Intent(HomeActivity.this, EditUser.class);
             startActivity(intent);
             binding.drawerLayout.closeDrawer(GravityCompat.START);
+
         });
+
     }
 
     private void setupTabLayout() {
@@ -271,9 +275,62 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
 
         // Cập nhật danh sách tour trong RecyclerView
+        fullTourList = new ArrayList<>(tourList);
         tourAdapter.submitList(tourList);
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.home_menu, menu);
+        // Thiết lập SearchView
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setQueryHint("Search tours...");
+
+        // Xử lý sự kiện khi người dùng nhập từ khóa tìm kiếm
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterTours(newText);
+                return true;
+            }
+        });
+
+        // Xử lý khi SearchView đóng (hiển thị lại danh sách ban đầu)
+        searchView.setOnCloseListener(() -> {
+            updateTourList();
+            return false;
+        });
+
+        return super.onCreateOptionsMenu(menu);
+    }
+    private void filterTours(String query) {
+        if (fullTourList == null) return;
+
+        List<Tour> filteredList = new ArrayList<>();
+        String queryLowerCase = query.toLowerCase();
+
+        for (Tour tour : fullTourList) {
+            String combinedData = (tour.getTile() + " " +
+                    tour.getLocationTo() + " " +
+                    tour.getLocationFrom() + " " +
+                    String.valueOf(tour.getPricePerPerson())).toLowerCase();
+
+            // Tìm kiếm từ khóa trong chuỗi tổng hợp
+            if (combinedData.contains(queryLowerCase)) {
+                filteredList.add(tour);
+            }
+        }
+
+        // Hiển thị kết quả tìm kiếm trên homepage
+        tourAdapter.submitList(filteredList);
+    }
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         // Handle log out
@@ -288,11 +345,5 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         binding.drawerLayout.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.home_menu, menu);
-        return super.onCreateOptionsMenu(menu);
     }
 }
