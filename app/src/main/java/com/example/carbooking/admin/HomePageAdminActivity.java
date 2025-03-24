@@ -24,6 +24,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.carbooking.LoginPage;
 import com.example.carbooking.R;
+import com.example.carbooking.admin.category.ListCategoryActivity;
 import com.example.carbooking.admin.order.OrderManagement;
 import com.example.carbooking.admin.tour.AddTourActivity;
 import com.example.carbooking.admin.tour.ListTourActivity;
@@ -35,10 +36,11 @@ public class HomePageAdminActivity extends AppCompatActivity {
     ImageButton buttonDrawerToggle;
     NavigationView navigationView;
     SharedPreferences preferences;
-    private CardView cardManageTours;
     private CardView cardManageAddTours;
-    private CardView cardManageUser;
-    private CardView cardManagerOrder;
+    private CardView cardManageToursList;
+    private CardView cardManageCategories;
+    private CardView cardManageOrder;
+    private CardView cardManageUsers;
     private CardView cardManagerLogout;
 
     @Override
@@ -74,10 +76,8 @@ public class HomePageAdminActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-
                 int itemId = menuItem.getItemId();
                 if (itemId == R.id.nav_tour_management) {
-                    // Toggle submenu visibility
                     menuItem.setChecked(!menuItem.isChecked());
                     if (menuItem.isChecked()) {
                         navigationView.getMenu().setGroupVisible(R.id.nav_tour_management, true);
@@ -96,6 +96,10 @@ public class HomePageAdminActivity extends AppCompatActivity {
                     Toast.makeText(HomePageAdminActivity.this, "Edit clicked", Toast.LENGTH_SHORT).show();
                 } else if (itemId == R.id.navRemoveTour) {
                     Toast.makeText(HomePageAdminActivity.this, "Remove clicked", Toast.LENGTH_SHORT).show();
+                } else if (itemId == R.id.nav_category_management) {
+                    Intent intent = new Intent(HomePageAdminActivity.this, ListCategoryActivity.class);
+                    startActivity(intent);
+                    Toast.makeText(HomePageAdminActivity.this, "Category Management clicked", Toast.LENGTH_SHORT).show();
                 } else if (itemId == R.id.navReport) {
                     Toast.makeText(HomePageAdminActivity.this, "Order Management clicked", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(HomePageAdminActivity.this, OrderManagement.class);
@@ -112,19 +116,11 @@ public class HomePageAdminActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
                 drawerLayout.close();
-
-
                 return false;
             }
         });
-        cardManageTours = findViewById(R.id.cardManageToursList);
-        cardManageTours.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(HomePageAdminActivity.this, ListTourActivity.class);
-                startActivity(intent);
-            }
-        });
+
+        // Khởi tạo và gán sự kiện cho CardView
         cardManageAddTours = findViewById(R.id.cardManageAddTours);
         cardManageAddTours.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,16 +129,36 @@ public class HomePageAdminActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        cardManagerOrder = findViewById(R.id.cardManageOrder);
-        cardManagerOrder.setOnClickListener(new View.OnClickListener() {
+
+        cardManageToursList = findViewById(R.id.cardManageToursList);
+        cardManageToursList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomePageAdminActivity.this, ListTourActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        cardManageCategories = findViewById(R.id.cardManageCategories);
+        cardManageCategories.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomePageAdminActivity.this, ListCategoryActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        cardManageOrder = findViewById(R.id.cardManageOrder);
+        cardManageOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(HomePageAdminActivity.this, OrderManagement.class);
                 startActivity(intent);
             }
         });
-        cardManageUser = findViewById(R.id.cardManageUsers);
-        cardManageUser.setOnClickListener(new View.OnClickListener() {
+
+        cardManageUsers = findViewById(R.id.cardManageUsers);
+        cardManageUsers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(HomePageAdminActivity.this, UserManagementActivity.class);
@@ -154,6 +170,9 @@ public class HomePageAdminActivity extends AppCompatActivity {
         cardManagerLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editor = preferences.edit();
+                editor.clear();
+                editor.apply();
                 Intent intent = new Intent(HomePageAdminActivity.this, LoginPage.class);
                 startActivity(intent);
             }
@@ -164,7 +183,6 @@ public class HomePageAdminActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
     }
 
     @SuppressLint("RestrictedApi")

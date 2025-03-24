@@ -1,6 +1,7 @@
 package com.example.carbooking.dao;
 
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -17,10 +18,12 @@ public interface CategoryDao {
     void update (Category category);
     @Query("SELECT * FROM Category c WHERE c.id =:categoryId")
     Category select(int categoryId);
+    @Query("SELECT * FROM Category WHERE active = 1")
+    List<Category> getAllCategories();
     @Query("SELECT * FROM Category")
     List<Category> selectAll();
     @Query("DELETE FROM Category")
     void deleteAll();
-    @Query("DELETE FROM Category WHERE id = :categoryId")
+    @Query("UPDATE Category SET active = 0 WHERE id = :categoryId")
     void delete(int categoryId);
 }

@@ -53,10 +53,10 @@ public class SeedDatabase {
             user.setLocked(false);
             userRepository.createUser(user);
             User user1 = new User();
-            user.setUserName("user1");
-            user.setPassword("User12345");
-            user.setRole_id(2);
-            user.setLocked(false);
+            user1.setUserName("user");
+            user1.setPassword("user");
+            user1.setRole_id(1);
+            user1.setLocked(false);
             userRepository.createUser(user1);
         }
 

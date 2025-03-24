@@ -20,6 +20,8 @@ public interface TourDao {
     @Query("SELECT * FROM Tour t WHERE t.id =:tour_id")
     Tour select(int tour_id);
 
+    @Query("SELECT * FROM Tour WHERE categoryId = :categoryId")
+    List<Tour> getToursByCategoryId(int categoryId);
     @Query("SELECT * FROM Tour")
     List<Tour> selectAll();
 

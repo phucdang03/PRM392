@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "723367787153",
-    "project_id": "prm392-4f42d",
-    "storage_bucket": "prm392-4f42d.appspot.com"
+    "project_number": "821227364705",
+    "project_id": "prm392-project-2eac4",
+    "storage_bucket": "prm392-project-2eac4.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:723367787153:android:6334a98a62cf3f68dcdd30",
+        "mobilesdk_app_id": "1:821227364705:android:30ce59177a14b9fad62520",
         "android_client_info": {
           "package_name": "com.example.carbooking"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAfz8G1wYiS_9KGSGvc51ikjVvlQzfSaP4"
+          "current_key": "AIzaSyA67nuYroNXxMp_tahCJydxxXgXBlL7jY0"
         }
       ],
       "services": {
